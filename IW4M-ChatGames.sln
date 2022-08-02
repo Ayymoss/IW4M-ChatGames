@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IW4M-ChatGames", "IW4M-ChatGames\IW4M-ChatGames.csproj", "{9830E378-BE29-4931-BE70-52F1ED03FC77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9830E378-BE29-4931-BE70-52F1ED03FC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9830E378-BE29-4931-BE70-52F1ED03FC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9830E378-BE29-4931-BE70-52F1ED03FC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9830E378-BE29-4931-BE70-52F1ED03FC77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
