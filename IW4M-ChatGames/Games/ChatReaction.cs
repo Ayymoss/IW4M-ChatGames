@@ -4,20 +4,18 @@ public class ChatReaction
 {
     public string Init()
     {
-        
-        
-        
         const int messageLength = Plugin.GameCharacterCount;
         const string charSet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
         var random = new Random();
-        var message = string.Empty;
-        
+        var answer = string.Empty;
+
         for (var i = 0; i < messageLength; i++)
         {
-            message += charSet[random.Next(charSet.Length)];
+            answer += charSet[random.Next(charSet.Length)];
         }
 
-        Plugin.GameManager.MessageAllServers($"(Color::Yellow)First to type: (Color::Accent){message}");
-        return message;
+        Plugin.GameManager.MessageAllServers($"(Color::Yellow)Chat Reaction: (Color::Accent){answer}");
+        
+        return answer;
     }
 }

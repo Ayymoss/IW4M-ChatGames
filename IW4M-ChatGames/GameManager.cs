@@ -12,6 +12,7 @@ public class GameManager
         {GamesSelection.QuickMaths, false},
         {GamesSelection.ChatReaction, false}
     };
+
     private string Answer { get; set; } = string.Empty;
     private Timer GameTimeOut { get; set; }
     private List<DateTime> ReactionTime { get; } = new();
@@ -28,7 +29,9 @@ public class GameManager
     private void InitGame(object source, ElapsedEventArgs e)
     {
         var rnd = new Random();
-        var game = (GamesSelection)rnd.Next(0, 3);
+        var game = (GamesSelection) rnd.Next(0, 3);
+
+        Answer = string.Empty;
 
         switch (game)
         {
@@ -45,7 +48,7 @@ public class GameManager
                 Answer = Plugin.Crossword.Init();
                 break;
         }
-        
+
         ReactionTime.Clear();
         ReactionTime.Add(DateTime.Now);
 
@@ -62,13 +65,14 @@ public class GameManager
         GameState[GamesSelection.ChatReaction] = false;
         GameState[GamesSelection.Crossword] = false;
         GameState[GamesSelection.QuickMaths] = false;
-        
-        MessageAllServers("(Color::Accent)Times up! (Color::Yellow)No one answered chat quick enough.");
+
+
+        MessageAllServers($"(Color::Yellow)Times up! (Color::Accent)The answer was (Color::Green){Answer})");
     }
-    
+
     public void UserMessageSent(GameEvent gameEvent)
     {
-        if (gameEvent.Message == Answer && !GameState[GamesSelection.ChatReaction])
+        if (gameEvent.Message == Answer && GameTimeOut is null)
         {
             gameEvent.Origin.Tell("(Color::Red)Unlucky! (Color::Accent)You answered too slow!");
             return;
