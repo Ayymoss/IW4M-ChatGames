@@ -1,7 +1,4 @@
-﻿using IW4M_ChatGames.Models;
-using Newtonsoft.Json;
-
-namespace IW4M_ChatGames.Games;
+﻿namespace IW4M_ChatGames.Games;
 
 public class Crossword
 {
@@ -12,6 +9,6 @@ public class Crossword
         
         Plugin.GameManager.MessageAllServers($"(Color::Yellow)Answer to win (Color::Green)$1,000: (Color::Accent){randomCrossword.Question}");
 
-        return randomCrossword.Answer;
+        return randomCrossword.Answer.ToLower();
     }
 }

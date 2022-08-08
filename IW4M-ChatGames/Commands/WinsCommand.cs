@@ -45,13 +45,13 @@ public class WinsCommand : Command
         if (gameEvent.Target != null)
         {
             gameEvent.Origin.Tell(
-                $"{gameEvent.Target.Name} (Color::White)has (Color::Cyan)${gameEvent.Target.GetAdditionalProperty<int>(Plugin.WinsKey):N0} (Color::White)in wins!");
+                $"{gameEvent.Target.Name} (Color::White)has (Color::Cyan)${gameEvent.Target.GetAdditionalProperty<int>(Plugin.WinsKey) * 1_000:N0} (Color::White)in wins!");
             return Task.CompletedTask;
         }
 
         // If no target specified
         gameEvent.Origin.Tell(
-            $"You have (Color::Cyan)${gameEvent.Origin.GetAdditionalProperty<int>(Plugin.WinsKey):N0} (Color::White)in wins!");
+            $"You have (Color::Cyan)${gameEvent.Origin.GetAdditionalProperty<int>(Plugin.WinsKey) * 1_000:N0} (Color::White)in wins!");
         return Task.CompletedTask;
     }
 }

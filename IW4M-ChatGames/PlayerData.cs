@@ -21,4 +21,11 @@ public class PlayerData
         var totalWins = (await _metaService.GetPersistentMeta(Plugin.WinsKey, client.ClientId))?.Value ?? "0";
         client.SetAdditionalProperty(Plugin.WinsKey, int.Parse(totalWins));
     }
+
+    public void AddWins(EFClient client, int wins)
+    {
+        var userWins = client.GetAdditionalProperty<int>(Plugin.WinsKey);
+        userWins += wins;
+        client.SetAdditionalProperty(Plugin.WinsKey, userWins);
+    }
 }

@@ -14,7 +14,7 @@ public class ChatReaction
             answer += charSet[random.Next(charSet.Length)];
         }
 
-        Plugin.GameManager.MessageAllServers($"(Color::Yellow)Chat Reaction: (Color::Accent){answer}");
+        Plugin.GameManager.MessageAllServers($"(Color::Yellow)React to win (Color::Green)$1,000: (Color::Accent){answer}");
         
         return answer;
     }

@@ -12,7 +12,7 @@ public class GameManager
         {GamesSelection.QuickMaths, false},
         {GamesSelection.ChatReaction, false}
     };
-
+    
     private string Answer { get; set; } = string.Empty;
     private Timer GameTimeOut { get; set; }
     private List<DateTime> ReactionTime { get; } = new();
@@ -30,8 +30,6 @@ public class GameManager
     {
         var rnd = new Random();
         var game = (GamesSelection) rnd.Next(0, 3);
-
-        Answer = string.Empty;
 
         switch (game)
         {
@@ -58,35 +56,41 @@ public class GameManager
         GameTimeOut.Enabled = true;
     }
 
-    private void FailedGame(object source, ElapsedEventArgs e)
+    private void FailedGame(object? source, ElapsedEventArgs e)
     {
         GameTimeOut.Dispose();
 
         GameState[GamesSelection.ChatReaction] = false;
         GameState[GamesSelection.Crossword] = false;
         GameState[GamesSelection.QuickMaths] = false;
-
-
-        MessageAllServers($"(Color::Yellow)Times up! (Color::Accent)The answer was (Color::Green){Answer})");
+        
+        MessageAllServers($"(Color::Yellow)Times up! (Color::Accent)The answer was (Color::Green){Answer}");
+        Answer = string.Empty;
     }
 
     public void UserMessageSent(GameEvent gameEvent)
     {
-        if (gameEvent.Message == Answer && GameTimeOut is null)
+        if (gameEvent.Message == Answer && GameState.Values.All(x => !x))
         {
             gameEvent.Origin.Tell("(Color::Red)Unlucky! (Color::Accent)You answered too slow!");
             return;
         }
 
-        if (gameEvent.Message == Answer && GameState[GamesSelection.ChatReaction])
+        if (gameEvent.Message == Answer && GameState.Values.Any(x => x))
         {
+            GameState[GamesSelection.ChatReaction] = false;
+            GameState[GamesSelection.Crossword] = false;
+            GameState[GamesSelection.QuickMaths] = false;
+            
             GameTimeOut.Enabled = false;
             ReactionTime.Add(DateTime.Now);
             var time = ReactionTime.Last().Subtract(ReactionTime.First());
 
             MessageAllServers($"(Color::Accent){gameEvent.Origin.CleanedName} (Color::White)was the " +
-                              $"fastest at (Color::Accent){time.TotalSeconds:N2}s");
-            gameEvent.Origin.Tell("(Color::Accent)Congratulations! (Color::Green)You answered the fastest!");
+                              $"fastest at (Color::Accent){time.TotalSeconds:N2}s. (Color::White)Answer: {Answer}");
+            gameEvent.Origin.Tell("(Color::Accent)Congratulations! (Color::Green)You answered the fastest! (Color::Accent)!wins");
+            
+            Plugin.PlayerData.AddWins(gameEvent.Origin, 1);
         }
     }
 

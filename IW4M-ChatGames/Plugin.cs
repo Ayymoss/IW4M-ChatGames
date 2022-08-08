@@ -8,11 +8,12 @@ namespace IW4M_ChatGames;
 
 public class Plugin : IPlugin
 {
-    public Plugin(IMetaServiceV2 metaService)
+    public Plugin(IMetaServiceV2 metaService, IConfigurationHandlerFactory configurationHandlerFactory)
     {
         PlayerData = new PlayerData(metaService);
+        _configurationHandler = configurationHandlerFactory.GetConfigurationHandler<CrosswordSeedData>($"IW4MChatGamesConfiguration");
     }
-
+    
     public string Name => "IW4M Chat Games";
     public float Version => 20220804f;
     public string Author => "Amos";
@@ -20,16 +21,15 @@ public class Plugin : IPlugin
     public const int GameDelay = 300_000;
     public const int GameFailDelay = 20_000;
     public const int GameCharacterCount = 12;
-
     public const string WinsKey = "IW4MChatGames_Wins";
 
+    public IConfigurationHandler<CrosswordSeedData> _configurationHandler;
     public static IManager? Manager { get; set; }
-    private static PlayerData PlayerData;
-    private static ConfigurationManager ConfigurationManager { get; } = new();
+    public static PlayerData PlayerData;
     public static GameManager GameManager { get; } = new();
     public static ChatReaction ChatReaction { get; } = new();
     public static Crossword Crossword { get; } = new();
-    public static List<CrosswordModel>? CrosswordModel { get; set; } = new();
+    public static List<CrosswordModel>? CrosswordModel { get; set; }
     public static QuickMaths QuickMaths { get; } = new();
 
     public Task OnEventAsync(GameEvent gameEvent, Server server)
@@ -50,22 +50,26 @@ public class Plugin : IPlugin
         return Task.CompletedTask;
     }
 
-    public Task OnLoadAsync(IManager manager)
+    public async Task OnLoadAsync(IManager manager)
     {
-        ConfigurationManager.Configuration();
-        Console.ReadKey();
-        Environment.Exit(0);
+        await _configurationHandler.BuildAsync();
+        if (_configurationHandler.Configuration() == null)
+        {
+            _configurationHandler.Set(new CrosswordSeedData());
+        }
+
+        await _configurationHandler.Save();
+        CrosswordModel = _configurationHandler.Configuration().Crosswords;
 
         Manager = manager;
         GameManager.OnLoad();
 
-        Console.WriteLine($"{Name} v{Version} by {Author} loaded");
-        return Task.CompletedTask;
+        Console.WriteLine($"[{Name}] v{Version} by {Author} loaded");
     }
 
     public Task OnUnloadAsync()
     {
-        Console.WriteLine($"{Name} unloaded");
+        Console.WriteLine($"[{Name}] unloaded");
         return Task.CompletedTask;
     }
 

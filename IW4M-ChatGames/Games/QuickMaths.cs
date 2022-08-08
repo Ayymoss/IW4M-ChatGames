@@ -35,7 +35,7 @@ public class QuickMaths
                 break;
         }
         
-        Plugin.GameManager.MessageAllServers($"(Color::Yellow)Quick Maffs: (Color::Accent){num1} {mathOperator} {num2}");
+        Plugin.GameManager.MessageAllServers($"(Color::Yellow)Solve to win (Color::Green)$1,000: (Color::Accent){num1} {mathOperator} {num2}");
 
         return answer.ToString();
     }
